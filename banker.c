@@ -17,6 +17,16 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
+/* Global variables. */
+/* Stores the number of available resources of each type. */
+int available[];
+/* Defines the max demand of each process. */
+int max[][];
+/* Defines the number of resources of each type allocated to each process. */
+int allocation[][];
+/* Indicates the remaining resource need of each process. */
+int need[][];
+
 /* Declare functions here. */
 
 int main(int argc, char *argv[]) {
@@ -31,16 +41,22 @@ int main(int argc, char *argv[]) {
     }
     /* Else, process the arguments from the command line. */
     else {
-        int num_first = atoi(argv[1]);
-        int num_second = atoi(argv[2]);
-        int num_third = atoi(argv[3]);
-        int runtime = atoi(argv[4]);
+        /* Declare an int[] available. */
+        available = int[4];
+
+        /* Initialize the available array. */
+        for (int i = 1; i <= 3; i++) {
+            available[i-1] = atoi(argv[i]);
+        }
+
+        /* Get the runtime. */
+        int runtime = atoi(arv[4]);
 
         /* Print a status report. */
         printf("\nNUMBER OF RESOURCES\n");
-        printf("FIRST: %d\n", num_first);
-        printf("SECOND: %d\n", num_second);
-        printf("THIRD: %d\n", num_third);
+        printf("FIRST: %d\n", available[0]);
+        printf("SECOND: %d\n", available[1]);
+        printf("THIRD: %d\n", available[2]);
         printf("\nRUNTIME: %d\n", runtime);
     }
 
