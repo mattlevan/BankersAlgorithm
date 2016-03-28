@@ -18,19 +18,17 @@
 #include <stdbool.h>
 
 /* Global variables. */
-struct State {
-    /* Stores the number of available resources of each type. */
-    int available[];
-    /* Defines the max demand of each process. */
-    int max[][];
-    /* Defines number of resources of each type allocated to each process. */
-    int allocation[][];
-    /* Indicates the remaining resource need of each process. */
-    int need[][];
-} state;
+/* Stores the number of available resources of each type. */
+int available[];
+/* Defines the max demand of each process. */
+int max[][];
+/* Defines number of resources of each type allocated to each process. */
+int allocation[][];
+/* Indicates the remaining resource need of each process. */
+int need[][];
 
 /* Functions. */
-bool is_safe(struct State state) {
+bool is_safe() {
 
 }
 
