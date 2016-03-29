@@ -17,6 +17,14 @@ Let's focus on 5 customers and 3 resources, as specified in the book.
 Please use the attached "max_demand.txt" for the maximum demand of each 
 process/customer; you can hard code this file name in your program.
 
+### Max Demand
+
+7,5,3  
+3,2,2  
+9,0,2  
+2,2,2  
+4,3,3  
+
 Each process/customer sleeps for a random time (between 0 and 5) and 
 then requests some number of instances for each resource type. Here, the 
 number of instances of each type requested by a process should be a random
