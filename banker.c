@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-/* is_safe, checks state safety. */
+/* is_safe, checks state safety. Returns true if safe, else false. */
 bool is_safe() {
     /* Work vector, length m. */
     int work[RESOURCES];
@@ -98,14 +98,11 @@ bool is_safe() {
             return true;
         }
     }
-
-    /* work = work + allocation[i];
-     * finish[i] = true;
-     * Go to step 2, finding index i.
-     */
-    if (i != NULL) {
+    else { 
+        /* work = work + allocation */
         add_vectors(work, allocation[i]);
         finish[i] = true;
+        /* Go to step 2. */
         i = find_i(work);
     }
 }
