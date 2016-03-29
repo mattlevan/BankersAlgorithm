@@ -37,6 +37,8 @@ int runtime = 0;
 /* Function declarations. */
 bool is_safe();
 void copy_array(int *src, int* dest);
+void set_all_false(bool *a);
+int find_i(int* work);
 
 /* Main function. */
 int main(int argc, char *argv[]) {
@@ -57,7 +59,7 @@ int main(int argc, char *argv[]) {
         }
 
         /* Get the runtime. */
-        runtime = atoi(arv[4]);
+        runtime = atoi(argv[4]);
 
         /* Print a status report. */
         printf("\nNUMBER OF RESOURCES\n");
@@ -81,10 +83,103 @@ bool is_safe() {
     bool finish[CUSTOMERS];
 
     /* Initialize work vector = available vector. */
-    if (copy_array(available, work) == false) {
-        printf("Array copy failed!");
-        exit(1);
+    copy_array(available, work);
+
+    /* Set all elements in finish vector to false. */
+    set_all_false(finish);
+
+    /* Find index i such that finish[i] == false && need[i] <= work. */
+    int i = find_i(work);
+
+    /* If no such i exists, check if all finish elements are true. */
+    if (i == NULL) {
+        if (all_true(finish) == true) {
+            /* The system is in a safe state! */
+            return true;
+        }
     }
+
+    /* work = work + allocation[i];
+     * finish[i] = true;
+     * Go to step 2, finding index i.
+     */
+    if (i != NULL) {
+        add_vectors(work, allocation[i]);
+        finish[i] = true;
+        i = find_i(work);
+    }
+}
+
+/* Find index i such that finish[i] == false && need[i] <= a. */
+int find_i(int* a) {
+    for (int i = 0; i < CUSTOMERS; i++) {
+        if (finish[i] == false && vector_cmp(need[i], a)) {
+            /* Such i exists. */
+            return i;
+        }
+    }
+    
+    /* Such i does not exist. */
+    return NULL;
+}
+
+/* Compare two vectors.
+ * if (a <= b) { return -1; }
+ * if (a == b) { return 0; }
+ */
+int vector_cmp(int* a, int* b) {
+    /* Boolean flags for tracking vector comparison. */
+    bool less_equal, equal = false;
+
+    /* Check if a <= b. If so, return -1. */
+    while (*(a) != NULL) {
+        if (*(a) <= *(b)) {
+            less_equal = true;
+            equal = false;
+
+            /* Increment pointers. */
+            a++;
+            b++;
+
+            continue;
+        }
+        else if (*(a) == *(b)) {
+            equal = true;
+
+            /* Increment pointers. */
+            a++;
+            b++;
+
+            continue;
+        }
+        else {
+            /* a must be > than b. */
+            return 1;
+        }
+
+        /* Check boolean flags. */
+        if (equal == true) {
+            return 0;
+        else if (less_equal == true) {
+            return -1;
+        }
+
+        /* Default case. */
+        return 1;
+    }
+}
+
+/* Check if all elements in given array are true. */
+bool all_true(bool* a) {
+    /* While the next int in the a array is not NULL... */
+    while (*(a) != NULL) {
+        if (*(a) != false) {
+            /* A false element exists, so return false. */
+            return false;
+        }
+    }
+    /* All elements are true, so return true. */
+    return true;
 }
 
 /* copy_array, returns true if successful, else false. */
@@ -95,3 +190,10 @@ void copy_array(int* src, int* dest) {
         *(dest++) = *(src++);
     }
 }
+
+void set_all_false(bool* a) {
+    while (*(a) != NULL) {
+        *(a) = false;
+    }
+}
+
