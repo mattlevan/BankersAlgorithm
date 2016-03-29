@@ -18,8 +18,8 @@
 #include <stdbool.h>
 
 /* Global definitions. */
-#define CUSTOMERS 5
-#define RESOURCES 3
+#define CUSTOMERS 5 // Referred to as 'n' in the book.
+#define RESOURCES 3 // Referred to as 'm' in the book.
 #define MAX_SLEEP 5
 
 /* Global variables. */
@@ -31,12 +31,14 @@ int max[CUSTOMERS][RESOURCES];
 int allocation[CUSTOMERS][RESOURCES];
 /* Indicates the remaining resource need of each customer. */
 int need[CUSTOMERS][RESOURCES];
+/* Defines the program's runtime, in seconds. */
+int runtime = 0;
 
-/* Functions. */
-bool is_safe() {
+/* Function declarations. */
+bool is_safe();
+void copy_array(int *src, int* dest);
 
-}
-
+/* Main function. */
 int main(int argc, char *argv[]) {
     /* Check that enough args were submitted by the user. */
     if (argc < 4) {
@@ -49,16 +51,13 @@ int main(int argc, char *argv[]) {
     }
     /* Else, process the arguments from the command line. */
     else {
-        /* Declare an int[] available. */
-        available = int[4];
-
-        /* Initialize the available array. */
+        /* Initialize the available vector with args. */
         for (int i = 1; i <= 3; i++) {
             available[i-1] = atoi(argv[i]);
         }
 
         /* Get the runtime. */
-        int runtime = atoi(arv[4]);
+        runtime = atoi(arv[4]);
 
         /* Print a status report. */
         printf("\nNUMBER OF RESOURCES\n");
@@ -72,4 +71,27 @@ int main(int argc, char *argv[]) {
     }
 
     return EXIT_SUCCESS;
+}
+
+/* is_safe, checks state safety. */
+bool is_safe() {
+    /* Work vector, length m. */
+    int work[RESOURCES];
+    /* Finish vector, length n. */
+    bool finish[CUSTOMERS];
+
+    /* Initialize work vector = available vector. */
+    if (copy_array(available, work) == false) {
+        printf("Array copy failed!");
+        exit(1);
+    }
+}
+
+/* copy_array, returns true if successful, else false. */
+void copy_array(int* src, int* dest) {
+    /* While the next int in the src array is not NULL... */
+    while (*(src) != NULL) {
+        /* Set the int at dest pointer to the int at src pointer. */
+        *(dest++) = *(src++);
+    }
 }
