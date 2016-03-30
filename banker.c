@@ -37,8 +37,9 @@ int runtime = 0;
 /* Function declarations. */
 bool is_safe();
 void copy_array(int *src, int* dest);
-void set_all_false(bool *a);
-int find_i(int* work);
+void set_all_false(bool* a);
+int find_i(int* work, bool* finish);
+bool all_true(bool* a);
 
 
 /* Main function. */
@@ -91,7 +92,7 @@ bool is_safe() {
     set_all_false(finish);
 
     /* Find index i such that finish[i] == false && need[i] <= work. */
-    int i = find_i(work);
+    int i = find_i(work, finish);
 
     /* If no such i exists, check if all finish elements are true. */
     if (i == NULL) {
@@ -105,15 +106,24 @@ bool is_safe() {
         add_vectors(work, allocation[i]);
         finish[i] = true;
         /* Go to step 2. */
-        i = find_i(work);
+        i = find_i(work, finish);
+    }
+}
+
+
+/* Adds vectors. a[i] += b[i] for all i 0..n-1. */
+void add_vectors(int* a, int* b) {
+    while (*(a) != NULL && *(b) != NULL) {
+        *(a++) += *(b++);
     }
 }
 
 
 /* Find index i such that finish[i] == false && need[i] <= a. */
-int find_i(int* a) {
+int find_i(int* work, bool* finish) {
     for (int i = 0; i < CUSTOMERS; i++) {
-        if (finish[i] == false && vector_cmp(need[i], a)) {
+        bool* finish_ptr = finish + i;
+        if (*(finish_ptr) == false && vector_cmp(need[i], work)) {
             /* Such i exists. */
             return i;
         }
@@ -161,6 +171,7 @@ int vector_cmp(int* a, int* b) {
         /* Check boolean flags. */
         if (equal == true) {
             return 0;
+        }
         else if (less_equal == true) {
             return -1;
         }
