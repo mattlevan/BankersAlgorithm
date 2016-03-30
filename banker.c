@@ -41,6 +41,7 @@ int runtime = 0;
 
 /* Function declarations. */
 bool is_safe();
+void add_vectors(); //added missing declaration
 bool all_true(bool* a);
 int find_i(int* work, bool* finish);
 void copy_array(int *src, int* dest);
@@ -61,7 +62,8 @@ int main(int argc, char *argv[]) {
     /* Else, process the arguments from the command line. */
     else {
         /* Initialize the available vector with args. */
-        for (int i = 1; i <= 3; i++) {
+        int i = 0; 
+        for (i = 1; i <= 3; i++) { //no for loop initial declarations
             available[i-1] = atoi(argv[i]);
         }
 
@@ -100,7 +102,7 @@ bool is_safe() {
     int i = find_i(work, finish);
 
     /* If no such i exists, check if all finish elements are true. */
-    if (i == NULL) {
+    if (i == -1) { //such I does not exist
         if (all_true(finish) == true) {
             /* The system is in a safe state! */
             return true;
@@ -118,7 +120,7 @@ bool is_safe() {
 
 /* Adds vectors. a[i] += b[i] for all i 0..n-1. */
 void add_vectors(int* a, int* b) {
-    while (*(a) != NULL && *(b) != NULL) {
+    while (a != NULL && b != NULL) { //only pointers can be NULL
         *(a++) += *(b++);
     }
 }
@@ -126,7 +128,8 @@ void add_vectors(int* a, int* b) {
 
 /* Find index i such that finish[i] == false && need[i] <= a. */
 int find_i(int* work, bool* finish) {
-    for (int i = 0; i < CUSTOMERS; i++) {
+    int i;
+    for (i = 0; i < CUSTOMERS; i++) { //no for loop initial declarations
         bool* finish_ptr = finish + i;
         if (*(finish_ptr) == false && vector_cmp(need[i], work)) {
             /* Such i exists. */
@@ -135,7 +138,7 @@ int find_i(int* work, bool* finish) {
     }
     
     /* Such i does not exist. */
-    return NULL;
+    return -1; //return -1 instead of null, to comply with int return type
 }
 
 
@@ -148,7 +151,7 @@ int vector_cmp(int* a, int* b) {
     bool less_equal, equal = false;
 
     /* Check if a <= b. If so, return -1. */
-    while (*(a) != NULL) {
+    while (a != NULL) {
         if (*(a) <= *(b)) {
             less_equal = true;
             equal = false;
@@ -190,7 +193,7 @@ int vector_cmp(int* a, int* b) {
 /* Check if all elements in given array are true. */
 bool all_true(bool* a) {
     /* While the next int in the a array is not NULL... */
-    while (*(a) != NULL) {
+    while (a != NULL) {
         if (*(a) != false) {
             /* A false element exists, so return false. */
             return false;
@@ -204,7 +207,7 @@ bool all_true(bool* a) {
 /* Copies array. Returns true if successful, else false. */
 void copy_array(int* src, int* dest) {
     /* While the next int in the src array is not NULL... */
-    while (*(src) != NULL) {
+    while (src != NULL) {
         /* Set the int at dest pointer to the int at src pointer. */
         *(dest++) = *(src++);
     }
@@ -213,7 +216,7 @@ void copy_array(int* src, int* dest) {
 
 /* Sets all elements of boolean array to false. */
 void set_all_false(bool* a) {
-    while (*(a) != NULL) {
+    while (a != NULL) {
         *(a) = false;
     }
 }
