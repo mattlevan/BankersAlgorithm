@@ -41,7 +41,8 @@ int runtime = 0;
 
 /* Function declarations. */
 bool is_safe();
-void add_vectors(); //added missing declaration
+void add_vectors(int* a, int* b); //added missing declaration
+int vector_cmp(int* a, int* b);
 bool all_true(bool* a);
 int find_i(int* work, bool* finish);
 void copy_array(int *src, int* dest);
@@ -183,10 +184,9 @@ int vector_cmp(int* a, int* b) {
         else if (less_equal == true) {
             return -1;
         }
-
+    }
         /* Default case. */
         return 1;
-    }
 }
 
 
