@@ -42,7 +42,7 @@ int runtime = 0;
 /* Function declarations. */
 bool is_safe();
 void add_vectors(int* a, int* b); //added missing declaration
-int vector_cmp(int* a, int* b);
+int vector_cmp(int* a, int* b); //added msising delcaration
 bool all_true(bool* a);
 int find_i(int* work, bool* finish);
 void copy_array(int *src, int* dest);
@@ -52,12 +52,12 @@ void set_all_false(bool* a);
 /* Main function. */
 int main(int argc, char *argv[]) {
     /* Check that enough args were submitted by the user. */
-    if (argc < 4) {
+    if (argc <= 4) {
         printf("\n");
         printf("Not enough arguments!");
         printf("\n");
-        printf("Usage: ./banker.o <int num first resource> <int num second> \
-                <int num third> <int runtime seconds>");
+        printf("Usage: ./banker.o <int num first resource> <int num second> " \
+               "<int num third> <int runtime seconds>");
         printf("\n");
     }
     /* Else, process the arguments from the command line. */
@@ -79,7 +79,9 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
-        /* Code goes here. */   
+        /* Create set number of customers/threads*/
+//        for(i = 0; i < CUSTOMERS; i++){
+//        pthread_t 
     }
 
     return EXIT_SUCCESS;
