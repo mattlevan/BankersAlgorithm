@@ -10,6 +10,8 @@
  * More info on page 345 of Operating Systems Concepts by Abraham Silberschatz.
  */
 
+
+/* Include statements. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <semaphore.h>
@@ -17,10 +19,12 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
+
 /* Global definitions. */
 #define CUSTOMERS 5 // Referred to as 'n' in the book.
 #define RESOURCES 3 // Referred to as 'm' in the book.
 #define MAX_SLEEP 5
+
 
 /* Global variables. */
 /* Stores the number of available resources of each type. */
@@ -34,12 +38,13 @@ int need[CUSTOMERS][RESOURCES];
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
+
 /* Function declarations. */
 bool is_safe();
+bool all_true(bool* a);
+int find_i(int* work, bool* finish);
 void copy_array(int *src, int* dest);
 void set_all_false(bool* a);
-int find_i(int* work, bool* finish);
-bool all_true(bool* a);
 
 
 /* Main function. */
