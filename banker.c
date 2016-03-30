@@ -40,6 +40,7 @@ void copy_array(int *src, int* dest);
 void set_all_false(bool *a);
 int find_i(int* work);
 
+
 /* Main function. */
 int main(int argc, char *argv[]) {
     /* Check that enough args were submitted by the user. */
@@ -75,7 +76,8 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 }
 
-/* is_safe, checks state safety. Returns true if safe, else false. */
+
+/* Checks state safety. Returns true if safe, else false. */
 bool is_safe() {
     /* Work vector, length m. */
     int work[RESOURCES];
@@ -107,6 +109,7 @@ bool is_safe() {
     }
 }
 
+
 /* Find index i such that finish[i] == false && need[i] <= a. */
 int find_i(int* a) {
     for (int i = 0; i < CUSTOMERS; i++) {
@@ -119,6 +122,7 @@ int find_i(int* a) {
     /* Such i does not exist. */
     return NULL;
 }
+
 
 /* Compare two vectors.
  * if (a <= b) { return -1; }
@@ -166,6 +170,7 @@ int vector_cmp(int* a, int* b) {
     }
 }
 
+
 /* Check if all elements in given array are true. */
 bool all_true(bool* a) {
     /* While the next int in the a array is not NULL... */
@@ -179,7 +184,8 @@ bool all_true(bool* a) {
     return true;
 }
 
-/* copy_array, returns true if successful, else false. */
+
+/* Copies array. Returns true if successful, else false. */
 void copy_array(int* src, int* dest) {
     /* While the next int in the src array is not NULL... */
     while (*(src) != NULL) {
@@ -188,6 +194,8 @@ void copy_array(int* src, int* dest) {
     }
 }
 
+
+/* Sets all elements of boolean array to false. */
 void set_all_false(bool* a) {
     while (*(a) != NULL) {
         *(a) = false;
