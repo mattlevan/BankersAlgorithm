@@ -18,7 +18,7 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <stdbool.h>
-
+#include "headers.h" //for utilize customer_args
 
 /* Global definitions. */
 #define CUSTOMERS 5 // Referred to as 'n' in the book.
@@ -79,9 +79,15 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
+
+        /*allocate memory for n threads*/
+        //pthread_t* thread = malloc(sizeof(pthread_t)*CUSTOMERS);
+        
+
         /* Create set number of customers/threads*/
-//        for(i = 0; i < CUSTOMERS; i++){
-//        pthread_t 
+        for(i = 0; i < CUSTOMERS; i++){
+             pthread_t; 
+        }
     }
 
     return EXIT_SUCCESS;
@@ -123,7 +129,7 @@ bool is_safe() {
 
 /* Adds vectors. a[i] += b[i] for all i 0..n-1. */
 void add_vectors(int* a, int* b) {
-    while (a != NULL && b != NULL) { //only pointers can be NULL
+    while (*(a) != NULL && *(b) != NULL) { //only pointers can be NULL
         *(a++) += *(b++);
     }
 }
@@ -154,7 +160,7 @@ int vector_cmp(int* a, int* b) {
     bool less_equal, equal = false;
 
     /* Check if a <= b. If so, return -1. */
-    while (a != NULL) {
+    while (*(a) != NULL) {
         if (*(a) <= *(b)) {
             less_equal = true;
             equal = false;
@@ -195,7 +201,7 @@ int vector_cmp(int* a, int* b) {
 /* Check if all elements in given array are true. */
 bool all_true(bool* a) {
     /* While the next int in the a array is not NULL... */
-    while (a != NULL) {
+    while (*(a) != NULL) {
         if (*(a) != false) {
             /* A false element exists, so return false. */
             return false;
@@ -218,7 +224,7 @@ void copy_array(int* src, int* dest) {
 
 /* Sets all elements of boolean array to false. */
 void set_all_false(bool* a) {
-    while (a != NULL) {
+    while (*(a) != NULL) {
         *(a) = false;
     }
 }
