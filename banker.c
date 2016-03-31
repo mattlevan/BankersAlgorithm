@@ -129,7 +129,7 @@ bool is_safe() {
 
 /* Adds vectors. a[i] += b[i] for all i 0..n-1. */
 void add_vectors(int* a, int* b) {
-    while (*(a) != NULL && *(b) != NULL) { //only pointers can be NULL
+    while (*(a) != NULL && *(b) != NULL) {
         *(a++) += *(b++);
     }
 }
@@ -215,7 +215,7 @@ bool all_true(bool* a) {
 /* Copies array. Returns true if successful, else false. */
 void copy_array(int* src, int* dest) {
     /* While the next int in the src array is not NULL... */
-    while (src != NULL) {
+    while (*(src) != NULL) {
         /* Set the int at dest pointer to the int at src pointer. */
         *(dest++) = *(src++);
     }
