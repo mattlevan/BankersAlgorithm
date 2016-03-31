@@ -116,7 +116,7 @@ bool is_safe() {
 }
 
 
-/* Adds vectors. a[i] += b[i] for all i 0..n-1. */
+/* Adds vectors. a[i] += b[i] for all i in range 0..n-1. */
 void add_vectors(int* a, int* b) {
     while (*(a) != NULL && *(b) != NULL) {
         *(a++) += *(b++);
