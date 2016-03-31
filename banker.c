@@ -24,7 +24,7 @@
 #define CUSTOMERS 5 // Referred to as 'n' in the book.
 #define RESOURCES 3 // Referred to as 'm' in the book.
 #define MAX_SLEEP 5
-
+#define file_name = "max_demand.txt" //hardcoded
 
 /* Global variables. */
 /* Stores the number of available resources of each type. */
@@ -38,6 +38,8 @@ int need[CUSTOMERS][RESOURCES];
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
+/*Defines the customer array, to hold all instances of customers*/
+pthread_t customers_array[CUSTOMERS];
 
 /* Function declarations. */
 bool is_safe();
@@ -79,21 +81,46 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
-
-        /*allocate memory for n threads*/
-        //pthread_t* thread = malloc(sizeof(pthread_t)*CUSTOMERS);
-        
-
         /* Create set number of customers/threads*/
+        pthread_attr_t attr; //atributes for all threads?
         for(i = 0; i < CUSTOMERS; i++){
-             pthread_t; 
+            pthread_t customers_array[i]; //create a customer
+            struct customer_args *args = malloc(sizeof(args)); 
+            args->resource_a = ;
+            args->resource_b = ;
+            args_>resource_c = ;
         }
     }
-
     return EXIT_SUCCESS;
+
+
+/*Initializes resources array given by max_demand.txt*/
+void initialize_resources() {
+    /*Read File*/
+    FILE *file_ptr = fopen(file_name, "r");
+    if(!file_ptr) {
+        printf("I/O Error, max_demand not found!");
+        exit(1);
+    }
+    /*TEMP MAX ARRAY*/
+    int maxdemand [CUSTOMERS][RESOURCES];/*
+        {7,5,3},
+        {3,2,2},
+        {9,0,2},
+        {2,2,2},
+        {4,3,3}};*/
+    fscanf(file_ptr, "%d", maxdemand[0][0]); //grab first integer to check
+    while(!feof(file_ptr)) {
+
+    /*Add new Max Array to Old one*/
+    int i,j ;
+    for(i = 0; i < CUSTOMERS; i ++) {
+        for( j = 0; j < RESOURCES; j++) { 
+            /*Add maxdemand and maxi for global*/
+            max[i][j] = maxdemand[i][j];
+        }
+    }
 }
-
-
 /* Checks state safety. Returns true if safe, else false. */
 bool is_safe() {
     /* Work vector, length m. */
