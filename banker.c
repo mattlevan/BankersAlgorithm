@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     else {
         /* Initialize the available vector with args. */
         int i = 0; 
-        for (i = 1; i <= 3; i++) { //no for loop initial declarations
+        for (i = 1; i <= 3; i++) {
             available[i-1] = atoi(argv[i]);
         }
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
-        /* Create set number of customers/threads*/
+        /* Create set number of customers/threads
         pthread_attr_t attr; //atributes for all threads?
         for(i = 0; i < CUSTOMERS; i++){
             pthread_t customers_array[i]; //create a customer
@@ -89,38 +89,11 @@ int main(int argc, char *argv[]) {
             args->resource_a = ;
             args->resource_b = ;
             args_>resource_c = ;
-        }
+        }*///Brads Work here
     }
     return EXIT_SUCCESS;
-
-
-/*Initializes resources array given by max_demand.txt*/
-void initialize_resources() {
-    /*Read File*/
-    FILE *file_ptr = fopen(file_name, "r");
-    if(!file_ptr) {
-        printf("I/O Error, max_demand not found!");
-        exit(1);
-    }
-    /*TEMP MAX ARRAY*/
-    int maxdemand [CUSTOMERS][RESOURCES];/*
-        {7,5,3},
-        {3,2,2},
-        {9,0,2},
-        {2,2,2},
-        {4,3,3}};*/
-    fscanf(file_ptr, "%d", maxdemand[0][0]); //grab first integer to check
-    while(!feof(file_ptr)) {
-
-    /*Add new Max Array to Old one*/
-    int i,j ;
-    for(i = 0; i < CUSTOMERS; i ++) {
-        for( j = 0; j < RESOURCES; j++) { 
-            /*Add maxdemand and maxi for global*/
-            max[i][j] = maxdemand[i][j];
-        }
-    }
 }
+
 /* Checks state safety. Returns true if safe, else false. */
 bool is_safe() {
     /* Work vector, length m. */
