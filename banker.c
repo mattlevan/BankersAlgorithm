@@ -18,13 +18,13 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <stdbool.h>
-
+#include "headers.h" //for utilize customer_args
 
 /* Global definitions. */
 #define CUSTOMERS 5 // Referred to as 'n' in the book.
 #define RESOURCES 3 // Referred to as 'm' in the book.
 #define MAX_SLEEP 5
-
+#define file_name = "max_demand.txt" //hardcoded
 
 /* Global variables. */
 /* Stores the number of available resources of each type. */
@@ -38,9 +38,13 @@ int need[CUSTOMERS][RESOURCES];
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
+/*Defines the customer array, to hold all instances of customers*/
+pthread_t customers_array[CUSTOMERS];
 
 /* Function declarations. */
 bool is_safe();
+void add_vectors(int* a, int* b); //added missing declaration
+int vector_cmp(int* a, int* b); //added msising delcaration
 bool all_true(bool* a);
 int find_i(int* work, bool* finish);
 void copy_array(int *src, int* dest);
@@ -50,18 +54,19 @@ void set_all_false(bool* a);
 /* Main function. */
 int main(int argc, char *argv[]) {
     /* Check that enough args were submitted by the user. */
-    if (argc < 4) {
+    if (argc <= 4) {
         printf("\n");
         printf("Not enough arguments!");
         printf("\n");
-        printf("Usage: ./banker.o <int num first resource> <int num second> \
-                <int num third> <int runtime seconds>");
+        printf("Usage: ./banker.o <int num first resource> <int num second> " \
+               "<int num third> <int runtime seconds>");
         printf("\n");
     }
     /* Else, process the arguments from the command line. */
     else {
         /* Initialize the available vector with args. */
-        for (int i = 1; i <= 3; i++) {
+        int i = 0; 
+        for (i = 1; i <= 3; i++) {
             available[i-1] = atoi(argv[i]);
         }
 
@@ -76,12 +81,18 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
-        /* Code goes here. */   
+        /* Create set number of customers/threads
+        pthread_attr_t attr; //atributes for all threads?
+        for(i = 0; i < CUSTOMERS; i++){
+            pthread_t customers_array[i]; //create a customer
+            struct customer_args *args = malloc(sizeof(args)); 
+            args->resource_a = ;
+            args->resource_b = ;
+            args_>resource_c = ;
+        }*///Brads Work here
     }
-
     return EXIT_SUCCESS;
 }
-
 
 /* Checks state safety. Returns true if safe, else false. */
 bool is_safe() {
@@ -100,7 +111,7 @@ bool is_safe() {
     int i = find_i(work, finish);
 
     /* If no such i exists, check if all finish elements are true. */
-    if (i == NULL) {
+    if (i == -1) { //such I does not exist
         if (all_true(finish) == true) {
             /* The system is in a safe state! */
             return true;
@@ -126,7 +137,8 @@ void add_vectors(int* a, int* b) {
 
 /* Find index i such that finish[i] == false && need[i] <= a. */
 int find_i(int* work, bool* finish) {
-    for (int i = 0; i < CUSTOMERS; i++) {
+    int i;
+    for (i = 0; i < CUSTOMERS; i++) { //no for loop initial declarations
         bool* finish_ptr = finish + i;
         if (*(finish_ptr) == false && vector_cmp(need[i], work)) {
             /* Such i exists. */
@@ -135,7 +147,7 @@ int find_i(int* work, bool* finish) {
     }
     
     /* Such i does not exist. */
-    return NULL;
+    return -1; //return -1 instead of null, to comply with int return type
 }
 
 
@@ -180,10 +192,9 @@ int vector_cmp(int* a, int* b) {
         else if (less_equal == true) {
             return -1;
         }
-
+    }
         /* Default case. */
         return 1;
-    }
 }
 
 
