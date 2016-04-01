@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
             pthread_t customers_array[i];
             /*create pthreads for each customer*/
             pthread_attr_init(&attr);
-            pthread_create((customer_args *) customers_array[i], &attr, Customer, args);
+            pthread_create(customers_array[i], &attr, Customer, args);
             pthread_join(customers_array[i], NULL);
         }
         //work here

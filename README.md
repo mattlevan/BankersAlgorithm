@@ -6,16 +6,16 @@ Dr. Bin Tang
 Matt Levan  
 Bradley Taniguchi  
 
-#Instructions
+### Instructions
 1. compile with `make` or `make app`
 2. run with `./banker.o <int num first resource> <int num second> <int num third> <int runtime seconds>`
-
+    example: `./banker.o 5 6 3 50` for a runtime of 50 seconds
 ---
-#Screenshots
+### Screenshots
 to be added...
 
 --- 
-# Prompt
+### Prompt
 
 Page 345.
 
