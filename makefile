@@ -3,7 +3,7 @@
 all: app cleanbuild
 
 app: banker.c readfile.o customer.o
-	gcc banker.c readfile.o customer.o -o banker.o -w
+	gcc -pthread banker.c readfile.o customer.o -o banker.o -w
 
 readfile.o: readfile.c
 	gcc -c readfile.c -o readfile.o

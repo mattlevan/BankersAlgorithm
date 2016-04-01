@@ -10,6 +10,7 @@
  * The customer function, with a few extra functions to debug*/
 
 #include <stdio.h>
+#include <stdlib.h>
 //#include <unistd.h>
 //#include <pthread.h>
 #include "headers.h"

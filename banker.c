@@ -18,15 +18,16 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <stdbool.h>
-#include "headers.h" //for utilize customer_args
+#include "headers.h" //for utilize customer_args, global variables
 
-/* Global definitions. */
+/* Global definitions, definitions moved to headers.h*/
+/* REMOVE BELOW LATER
 #define CUSTOMERS 5 // Referred to as 'n' in the book.
 #define RESOURCES 3 // Referred to as 'm' in the book.
 #define MAX_SLEEP 5
 #define file_name "max_demand.txt" //hardcoded
-
-/* Global variables. */
+*/
+/* Global variables. externed in headers.h to allow customer.c to handle same resources*/
 /* Stores the number of available resources of each type. */
 int available[RESOURCES];
 /* Defines the max demand of each customer. */
@@ -35,6 +36,7 @@ int max[CUSTOMERS][RESOURCES];
 int allocation[CUSTOMERS][RESOURCES];
 /* Indicates the remaining resource need of each customer. */
 int need[CUSTOMERS][RESOURCES];
+
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
@@ -83,22 +85,27 @@ int main(int argc, char *argv[]) {
 
         /* Get the max demand for each customer from max_demand.txt. */
         initialize_demand();
+
 //        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print        
-        /*Create set number of customers*/
+
         pthread_attr_t attr; //atributes for all threads?
+
+        /*create struct to assign to customer thread*/
+        struct customer_args *args =  malloc(sizeof(args));
+        /*assign arguments as starting resources*/
+        args->resource_a = *argv[1];
+        args->resource_b = *argv[2];
+        args->resource_c = *argv[3];
+
         for(i = 0; i < CUSTOMERS; i++){
             /*Create customer*/
             pthread_t customers_array[i];
-            /*create struct to assign to customer thread*/
-            struct customer_args *args = malloc(sizeof(args));
-            /*assign arguments as starting resources*/
-            args->resource_a = *argv[1];
-            args->resource_b = *argv[2];
-            args->resource_c = *argv[3];
-            /*create pthread*/
+            /*create pthreads for each customer*/
             pthread_attr_init(&attr);
-            pthread_create(customers_array[i], &attr, Customer, args); 
+            pthread_create((customer_args *) customers_array[i], &attr, Customer, args);
+            pthread_join(customers_array[i], NULL);
         }
+        //work here
     }
     return EXIT_SUCCESS;
 }
@@ -107,7 +114,7 @@ void initialize_demand() {
     int col = CUSTOMERS;
     int row = RESOURCES; 
     /*assigns the values from the file into available 2D array*/
-    get_array_from_file(file_name, (int *) max, col, row, 1000);
+    get_array_from_file(FILE_NAME, (int *) max, col, row, 1000);
 }
 
 /* Checks state safety. Returns true if safe, else false. */
