@@ -83,18 +83,21 @@ int main(int argc, char *argv[]) {
 
         /* Get the max demand for each customer from max_demand.txt. */
         initialize_demand();
-        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print
+//        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print        
         /*Create set number of customers*/
         pthread_attr_t attr; //atributes for all threads?
         for(i = 0; i < CUSTOMERS; i++){
             /*Create customer*/
             pthread_t customers_array[i];
             /*create struct to assign to customer thread*/
-//            struct customer_args *args = malloc(sizeof(args));
-//            args->resource_a = ;
-//            args->resource_b = ;
-//            args_>resource_c = ;
-          
+            struct customer_args *args = malloc(sizeof(args));
+            /*assign arguments as starting resources*/
+            args->resource_a = *argv[1];
+            args->resource_b = *argv[2];
+            args->resource_c = *argv[3];
+            /*create pthread*/
+            pthread_attr_init(&attr);
+            pthread_create(customers_array[i], &attr, Customer, args); 
         }
     }
     return EXIT_SUCCESS;

@@ -16,3 +16,6 @@ struct customer_args {
 void printarray(int* array, int row, int col);
 /*Builds 2D array from integers in CSV text file*/
 void get_array_from_file(char *fname, int *array, int row, int col, int buff_len);
+
+/*Customer function declaration*/
+void *Customer(void *customer_args_ptr);
