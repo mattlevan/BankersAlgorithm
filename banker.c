@@ -24,7 +24,7 @@
 #define CUSTOMERS 5 // Referred to as 'n' in the book.
 #define RESOURCES 3 // Referred to as 'm' in the book.
 #define MAX_SLEEP 5
-#define file_name = "max_demand.txt" //hardcoded
+#define file_name "max_demand.txt" //hardcoded
 
 /* Global variables. */
 /* Stores the number of available resources of each type. */
@@ -42,6 +42,7 @@ int runtime = 0;
 pthread_t customers_array[CUSTOMERS];
 
 /* Function declarations. */
+void initialize_demand();
 bool is_safe();
 void add_vectors(int* a, int* b); //added missing declaration
 int vector_cmp(int* a, int* b); //added msising delcaration
@@ -81,17 +82,29 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
-        /* Create set number of customers/threads
+        initialize_demand();
+        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print
+        /*Create set number of customers*/
         pthread_attr_t attr; //atributes for all threads?
         for(i = 0; i < CUSTOMERS; i++){
-            pthread_t customers_array[i]; //create a customer
-            struct customer_args *args = malloc(sizeof(args)); 
-            args->resource_a = ;
-            args->resource_b = ;
-            args_>resource_c = ;
-        }*///Brads Work here
+            /*Create customer*/
+            pthread_t customers_array[i];
+            /*create struct to assign to customer thread*/
+//            struct customer_args *args = malloc(sizeof(args));
+//            args->resource_a = ;
+//            args->resource_b = ;
+//            args_>resource_c = ;
+          
+        }
     }
     return EXIT_SUCCESS;
+}
+/*Initialize values from max_demand.txt*/
+void initialize_demand() {
+    int col = CUSTOMERS;
+    int row = RESOURCES; 
+    /*assigns the values from the file into available 2D array*/
+    get_array_from_file(file_name, (int *) max, col, row, 1000);
 }
 
 /* Checks state safety. Returns true if safe, else false. */
