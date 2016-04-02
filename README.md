@@ -1,6 +1,21 @@
 # Banker's Algorithm
+Project 4  
+CSC 341: Operating Systems  
+Dr. Bin Tang  
+  
+Matt Levan  
+Bradley Taniguchi  
 
-# Prompt
+### Instructions
+1. compile with `make` or `make app`
+2. run with `./banker.o <int num first resource> <int num second> <int num third> <int runtime seconds>`
+    example: `./banker.o 5 6 3 50` for a runtime of 50 seconds
+---
+### Screenshots
+to be added...
+
+--- 
+### Prompt
 
 Page 345.
 
@@ -17,6 +32,7 @@ Let's focus on 5 customers and 3 resources, as specified in the book.
 Please use the attached "max_demand.txt" for the maximum demand of each 
 process/customer; you can hard code this file name in your program.
 
+---
 ### Max Demand
 
 7,5,3  
