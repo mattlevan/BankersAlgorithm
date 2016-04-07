@@ -101,6 +101,7 @@ int main(int argc, char *argv[]) {
             /*Create customer*/
             pthread_t customers_array[i];
             /*create pthreads for each customer*/
+            printf("DEBUG: Created %d pthread", i); //debug print
             pthread_attr_init(&attr);
             pthread_create(customers_array[i], &attr, Customer, args);
             pthread_join(customers_array[i], NULL);
