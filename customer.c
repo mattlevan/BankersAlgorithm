@@ -1,5 +1,5 @@
 /*
- * Customer "class"
+ * customer.c
  * Project 4
  * CSC 341: Operating Systems
  * Dr. Bin Tang
@@ -7,13 +7,13 @@
  * Matt Levan
  * Brad Taniguchi
  *
- * The customer function, with a few extra functions that pertain the the Customer function*/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-//#include <pthread.h>
+#include <pthread.h>
 #include "headers.h"
 
 /*Local file declarations below*/
@@ -38,17 +38,18 @@ void *Customer(void *customer_args_ptr) {
     }
 }
 
-/*Returns number between 0 and x*/
+/* Returns number between 0 and x. */
 int myRand(int x) {
     srand(time(NULL)); 
     return (rand() % x); 
 }
-/*"Uses" item for n seconds, then returns returns resources back to system*/
+
+/* Uses item for n seconds, then returns returns resources back to system. */
 void use_resouces(int n) {
-        /*grab resources here*/
+    /*grab resources here*/
 
-        /*sleep n seconds*/
-        sleep(n);
+    /*sleep n seconds*/
+    sleep(n);
 
-        /*return resources here*/
+    /*return resources here*/
 }
