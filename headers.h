@@ -17,7 +17,7 @@
 #define TRUE 1
 
 /*Hard Coded Max Demand*/
-int max_demand[][] = {
+int max_demand[CUSTOMERS][RESOURCES] = {
     {7,5,3},
     {3,2,2},
     {9,0,2},

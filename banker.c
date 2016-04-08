@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         /* Get the max demand for each customer from max_demand.txt. */
-        initialize_demand();
+        //copy 2d array max into max demand       
 
 //        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print        
 
@@ -97,14 +97,6 @@ int main(int argc, char *argv[]) {
         //work here
     }
     return EXIT_SUCCESS;
-}
-
-/* Initialize values from max_demand.txt. */
-void initialize_demand() {
-    int col = CUSTOMERS;
-    int row = RESOURCES; 
-    /*assigns the values from the file into available 2D array*/
-    get_array_from_file(FILE_NAME, (int *) max, col, row, 1000);
 }
 
 /* Checks state safety. Returns true if safe, else false. */
