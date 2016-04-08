@@ -14,7 +14,15 @@
 #define RESOURCES 3
 #define MAX_SLEEP 5
 #define FILE_NAME "max_demand.txt"
+#define TRUE 1
 
+/*Hard Coded Max Demand*/
+int max_demand[][] = {
+    {7,5,3},
+    {3,2,2},
+    {9,0,2},
+    {2,2,2},
+    {4,3,3}};
 /*Defined in banker.c*/
 /* Stores the number of available resources of each type. */
 extern int available[RESOURCES];
