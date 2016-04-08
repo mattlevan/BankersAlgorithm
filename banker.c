@@ -27,6 +27,9 @@ int runtime = 0;
 /* Defines the customer array, to hold all instances of customers. */
 pthread_t customers_array[CUSTOMERS];
 
+/*Sync tool, bank system = 1 teller*/
+sem_t teller;
+
 /* Function declarations. */
 bool all_true(bool* a);
 bool is_safe();
@@ -81,6 +84,8 @@ int main(int argc, char *argv[]) {
         args->resource_b = *argv[2];
         args->resource_c = *argv[3];
 
+        /*Initialize the synchronization tools NOTE 1 teller?*/
+        sem_init(&teller, 0, 1);
         for(i = 0; i < CUSTOMERS; i++){
             /* Create customer. */
             pthread_t customers_array[i];
@@ -205,7 +210,43 @@ int vector_cmp(int* a, int* b) {
         return 1;
 }
 
+/*Resource-Request Algorithn section below
+ * 1. if requesti <= Needi, goto step 2: ELSE raise error
+ *      since process has exceeded its max claim (liar!)
+ * 2. If request <= Available goto step3, ELSE make it WAIT
+ *      since resources are not available.
+ * 3. Test to allocate requested resource to Processi by modify state:
+ *          Available = available - request
+ *          Allocation = allocationi + request
+ *          Needi = Needi - requesti
+ *          if safe state 
+ * Int customer = customer # (0-4)
+ * Int res = resource type to be requested(type 0-2)
+ * Int req = amount of resource trying to be requested
+ * Int max*/
 
+bool Resource_Request(int customer, int res, int req, int max) {
+    if (req <= max) {
+        printf("ERROR! Exceeding max claim: %d <= %d", req, max);
+    }
+    while(TRUE) {
+        
+        /*If resource type amount isn't available*/
+        if (req <= available[res] ){
+            //WORK HERE SEE IF CAN CREATE SAFE STATE!!!
+            //USED COPIED STATES OF EVERYTHING
+            //IF SAFE, THEN EXECUTE, IF NOT SAFE DO NOTHING!
+            
+            /*wait until teller is available*/
+            sem_wait(&teller);
+            
+            /*CRITICAL SECTION*/        
+            available[res] = available[res] - req;
+            allocation[customer][res] = allocation[customer][res] + req;
+            Need
+        }//else go thru while again
+    }
+}
 /* Check if all elements in given array are true. */
 bool all_true(bool* a) {
     /* While the next int in the a array is not NULL... */
