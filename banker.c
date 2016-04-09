@@ -220,7 +220,7 @@ int vector_cmp(int* a, int* b) {
  * Int req = amount of resource trying to be requested
  * Int max*/
 
-bool Resource_Request(int customer) {
+bool resource_request(int customer) {
     if (req <= max[customer][res]) {
         printf("ERROR! Exceeding max claim: %d <= %d", req, max);
     }
