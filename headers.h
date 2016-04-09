@@ -8,6 +8,7 @@
  *
  * Headerfile to hold global definitions, and function definitions
  */
+#include <stdbool.h>
 /*GLOBAL VARIABLES
  * declared here so they can be accessed in customer.c and banker.c*/
 #define CUSTOMERS 5
@@ -32,13 +33,9 @@ struct customer_args {
     int resource_c;
     int customer_num;
 };
-/*NOTE for the following two functions use the following syntaxt to call:
- * get_array_from_file((int *)array,2,3,0)*/
-
-/*2D Array printer*/
-extern void printarray(int* array, int row, int col);
-/*Builds 2D array from integers in CSV text file*/
-extern void get_array_from_file(char *fname, int *array, int row, int col, int buff_len);
 
 /*Customer function declaration*/
 extern void *Customer(void *customer_args_ptr);
+
+/*Allow Customer function to use Resource_Request*/
+extern bool Resource_Request(int customer, int res, int req);

@@ -220,8 +220,8 @@ int vector_cmp(int* a, int* b) {
  * Int req = amount of resource trying to be requested
  * Int max*/
 
-bool Resource_Request(int customer, int res, int req, int max) {
-    if (req <= max) {
+bool Resource_Request(int customer) {
+    if (req <= max[customer][res]) {
         printf("ERROR! Exceeding max claim: %d <= %d", req, max);
     }
     while(TRUE) {
@@ -249,7 +249,7 @@ bool Resource_Request(int customer, int res, int req, int max) {
             backup_allocation[customer][res] = allocation[customer][res] + req;
             backup_need[customer][res] = backup_need[customer][res] - req;
             /*Now check if backup state is safe*/
-            //change safe here
+            
 
             //move on only if safestate
             /*wait until teller is available*/
