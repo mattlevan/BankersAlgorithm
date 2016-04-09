@@ -2,11 +2,8 @@
 
 all: app cleanbuild
 
-app: banker.c readfile.o customer.o
-	gcc -pthread banker.c readfile.o customer.o -o banker.o -w
-
-readfile.o: readfile.c
-	gcc -c readfile.c -o readfile.o
+app: banker.c customer.o
+	gcc -pthread banker.c customer.o -o banker.o -w
 
 customer.o: customer.c 
 	gcc -c customer.c -o customer.o
@@ -14,11 +11,9 @@ customer.o: customer.c
 # manual clean of everything
 clean: 
 	rm -f banker.o
-	rm -f readfile.o
 	rm -f customer.o
 
 # auto clean of only build items
-cleanbuild:
-	rm -f readfile.o
+cleanbuild: 
 	rm -f customer.o
 

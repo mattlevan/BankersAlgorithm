@@ -20,12 +20,26 @@
 #include <stdbool.h>
 #include "headers.h" //for utilize customer_args, global variables
 
-/* Global definitions, more found in headers.h. */
+/* Global definitions */
+int available[RESOURCES];
+/*Hardcoded max_demand*/
+int max[CUSTOMERS][RESOURCES] = {
+    {7,5,3},
+    {3,2,2},
+    {9,0,2},
+    {2,2,2},
+    {4,3,3}};
+int allocation[CUSTOMERS][RESOURCES];
+int need[CUSTOMERS][RESOURCES];
+
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
 /* Defines the customer array, to hold all instances of customers. */
 pthread_t customers_array[CUSTOMERS];
+
+/*Sync tool, bank system = 1 teller*/
+sem_t teller;
 
 /* Function declarations. */
 bool all_true(bool* a);
@@ -67,39 +81,25 @@ int main(int argc, char *argv[]) {
         printf("THIRD: %d\n", available[2]);
         printf("\nRUNTIME: %d seconds\n", runtime);
 
-        /* Get the max demand for each customer from max_demand.txt. */
-        initialize_demand();
-
-//        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print        
-
         pthread_attr_t attr; //atributes for all threads?
-
-        /* Create struct to assign to customer thread. */
-        struct customer_args *args =  malloc(sizeof(args));
-        /* Assign arguments as starting resources. */
-        args->resource_a = *argv[1];
-        args->resource_b = *argv[2];
-        args->resource_c = *argv[3];
-
+        /*Initialize the synchronization tools NOTE 1 teller?*/
+        sem_init(&teller, 0, 1);
         for(i = 0; i < CUSTOMERS; i++){
+            /*Create struct to assign to customer threads*/
+            struct customer_args *args = malloc(sizeof(struct customer_args));
+            args->resource_a=*argv[1];
+            args->resource_b=*argv[2];
+            args->resource_c=*argv[3];
             /* Create customer. */
             pthread_t customers_array[i];
             /* Create pthreads for each customer. */
             pthread_attr_init(&attr);
-            pthread_create(customers_array[i], &attr, Customer, args);
+            pthread_create(&customers_array[i], &attr, Customer, args);
             pthread_join(customers_array[i], NULL);
         }
-        //work here
+        printf("End main");
     }
     return EXIT_SUCCESS;
-}
-
-/* Initialize values from max_demand.txt. */
-void initialize_demand() {
-    int col = CUSTOMERS;
-    int row = RESOURCES; 
-    /*assigns the values from the file into available 2D array*/
-    get_array_from_file(FILE_NAME, (int *) max, col, row, 1000);
 }
 
 /* Checks state safety. Returns true if safe, else false. */
@@ -205,7 +205,63 @@ int vector_cmp(int* a, int* b) {
         return 1;
 }
 
+/*Resource-Request Algorithn section below
+ * 1. if requesti <= Needi, goto step 2: ELSE raise error
+ *      since process has exceeded its max claim (liar!)
+ * 2. If request <= Available goto step3, ELSE make it WAIT
+ *      since resources are not available.
+ * 3. Test to allocate requested resource to Processi by modify state:
+ *          Available = available - request
+ *          Allocation = allocationi + request
+ *          Needi = Needi - requesti
+ *          if safe state 
+ * Int customer = customer # (0-4)
+ * Int res = resource type to be requested(type 0-2)
+ * Int req = amount of resource trying to be requested
+ * Int max*/
 
+bool Resource_Request(int customer) {
+    if (req <= max[customer][res]) {
+        printf("ERROR! Exceeding max claim: %d <= %d", req, max);
+    }
+    while(TRUE) {
+        
+        /*If resource type amount isn't available*/
+        if (req <= available[res] ){
+            //WORK HERE SEE IF CAN CREATE SAFE STATE!!!
+            //USED COPIED STATES OF EVERYTHING
+            //IF SAFE, THEN EXECUTE, IF NOT SAFE DO NOTHING!
+            
+            /*Create backup array, incase this array wont work*/
+            int backup_available[RESOURCES]; 
+            int backup_max[CUSTOMERS][RESOURCES];
+            int backup_allocation[CUSTOMERS][RESOURCES];
+            int backup_need[CUSTOMERS][RESOURCES];
+            
+            /*Create backupstate, to check before it is finalized*/
+            copy_array(available, backup_available);
+            copy_array((int *) max, (int *)backup_max); //test this?
+            copy_array((int *) allocation, (int *) backup_allocation);
+            copy_array((int *) need, (int *) backup_need);
+            
+            /*Now update backup state*/
+            backup_available[res] = backup_available[res] - req;
+            backup_allocation[customer][res] = allocation[customer][res] + req;
+            backup_need[customer][res] = backup_need[customer][res] - req;
+            /*Now check if backup state is safe*/
+            
+
+            //move on only if safestate
+            /*wait until teller is available*/
+            sem_wait(&teller);
+            
+            /*CRITICAL SECTION*/        
+            available[res] = available[res] - req;
+            allocation[customer][res] = allocation[customer][res] + req;
+            
+        }//else go thru while again
+    }
+}
 /* Check if all elements in given array are true. */
 bool all_true(bool* a) {
     /* While the next int in the a array is not NULL... */
