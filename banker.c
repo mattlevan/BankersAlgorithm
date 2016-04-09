@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
             pthread_t customers_array[i];
             /* Create pthreads for each customer. */
             pthread_attr_init(&attr);
-            pthread_create(&customers_array[i], &attr, Customer, args);
+            pthread_create(&customers_array[i], &attr, customer, args);
             pthread_join(customers_array[i], NULL);
         }
         printf("End main");
