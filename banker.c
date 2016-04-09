@@ -229,13 +229,33 @@ bool Resource_Request(int customer, int res, int req, int max) {
             //USED COPIED STATES OF EVERYTHING
             //IF SAFE, THEN EXECUTE, IF NOT SAFE DO NOTHING!
             
+            /*Create backup array, incase this array wont work*/
+            int backup_available[RESOURCES]; 
+            int backup_max[CUSTOMERS][RESOURCES];
+            int backup_allocation[CUSTOMERS][RESOURCES];
+            int backup_need[CUSTOMERS][RESOURCES];
+            
+            /*Create backupstate, to check before it is finalized*/
+            copy_array(available, backup_available);
+            copy_array((int *) max, (int *)backup_max); //test this?
+            copy_array((int *) allocation, (int *) backup_allocation);
+            copy_array((int *) need, (int *) backup_need);
+            
+            /*Now update backup state*/
+            backup_available[res] = backup_available[res] - req;
+            backup_allocation[customer][res] = allocation[customer][res] + req;
+            backup_need[customer][res] = backup_need[customer][res] - req;
+            /*Now check if backup state is safe*/
+            //change safe here
+
+            //move on only if safestate
             /*wait until teller is available*/
             sem_wait(&teller);
             
             /*CRITICAL SECTION*/        
             available[res] = available[res] - req;
             allocation[customer][res] = allocation[customer][res] + req;
-            Need
+            
         }//else go thru while again
     }
 }
