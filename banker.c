@@ -39,7 +39,7 @@ int runtime = 0;
 pthread_t customers_array[CUSTOMERS];
 
 /*Sync tool, bank system = 1 teller*/
-sem_t teller;
+pthread_mutex_t teller;
 
 /* Function declarations. */
 bool all_true(bool* a);
@@ -221,45 +221,46 @@ int vector_cmp(int* a, int* b) {
  * Int max*/
 
 bool Resource_Request(int customer) {
+    //randomo stuff
     if (req <= max[customer][res]) {
         printf("ERROR! Exceeding max claim: %d <= %d", req, max);
+        exit(1);
     }
-    while(TRUE) {
+    pthread_mutex_lock(&teller);
+            
+    /*If resource type amount isn't available*/
+    if (req <= available[res] ){
+        //WORK HERE SEE IF CAN CREATE SAFE STATE!!!
+        //USED COPIED STATES OF EVERYTHING
+        //IF SAFE, THEN EXECUTE, IF NOT SAFE DO NOTHING!
         
-        /*If resource type amount isn't available*/
-        if (req <= available[res] ){
-            //WORK HERE SEE IF CAN CREATE SAFE STATE!!!
-            //USED COPIED STATES OF EVERYTHING
-            //IF SAFE, THEN EXECUTE, IF NOT SAFE DO NOTHING!
-            
-            /*Create backup array, incase this array wont work*/
-            int backup_available[RESOURCES]; 
-            int backup_max[CUSTOMERS][RESOURCES];
-            int backup_allocation[CUSTOMERS][RESOURCES];
-            int backup_need[CUSTOMERS][RESOURCES];
-            
-            /*Create backupstate, to check before it is finalized*/
-            copy_array(available, backup_available);
-            copy_array((int *) max, (int *)backup_max); //test this?
-            copy_array((int *) allocation, (int *) backup_allocation);
-            copy_array((int *) need, (int *) backup_need);
-            
-            /*Now update backup state*/
-            backup_available[res] = backup_available[res] - req;
-            backup_allocation[customer][res] = allocation[customer][res] + req;
-            backup_need[customer][res] = backup_need[customer][res] - req;
-            /*Now check if backup state is safe*/
-            
+        /*Create backup array, incase this array wont work*/
+        int backup_available[RESOURCES]; 
+        int backup_max[CUSTOMERS][RESOURCES];
+        int backup_allocation[CUSTOMERS][RESOURCES];
+        int backup_need[CUSTOMERS][RESOURCES];
+        
+        /*Create backupstate, to check before it is finalized*/
+        copy_array(available, backup_available);
+        copy_array((int *) max, (int *)backup_max); //test this?
+        copy_array((int *) allocation, (int *) backup_allocation);
+        copy_array((int *) need, (int *) backup_need);
+        
+        /*Now update backup state*/
+        backup_available[res] = backup_available[res] - req;
+        backup_allocation[customer][res] = allocation[customer][res] + req;
+        backup_need[customer][res] = backup_need[customer][res] - req;
+        /*Now check if backup state is safe*/
+        
 
-            //move on only if safestate
-            /*wait until teller is available*/
-            sem_wait(&teller);
+        //move on only if safestate
+        /*wait until teller is available*/
+        sem_wait(&teller);
+        
+        /*CRITICAL SECTION*/        
+        available[res] = available[res] - req;
+        allocation[customer][res] = allocation[customer][res] + req;
             
-            /*CRITICAL SECTION*/        
-            available[res] = available[res] - req;
-            allocation[customer][res] = allocation[customer][res] + req;
-            
-        }//else go thru while again
     }
 }
 /* Check if all elements in given array are true. */

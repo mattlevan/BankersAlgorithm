@@ -39,3 +39,6 @@ extern void *Customer(void *customer_args_ptr);
 
 /*Allow Customer function to use Resource_Request*/
 extern bool Resource_Request(int customer, int res, int req);
+
+/*Allow Main file to use rand*/
+int myRand(int x);
