@@ -20,10 +20,22 @@
 #include <stdbool.h>
 #include "headers.h" //for utilize customer_args, global variables
 
-/* Global definitions, more found in headers.h. */
+/* Global definitions */
+int available[RESOURCES];
+int max[CUSTOMERS][RESOURCES];
+int allocation[CUSTOMERS][RESOURCES];
+int need[CUSTOMERS][RESOURCES];
+
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
+/*Defines max_demand, hard coded*/
+int max_demand[CUSTOMERS][RESOURCES] = {
+    {7,5,3},
+    {3,2,2},
+    {9,0,2},
+    {2,2,2},
+    {4,3,3}};
 /* Defines the customer array, to hold all instances of customers. */
 pthread_t customers_array[CUSTOMERS];
 
@@ -70,13 +82,7 @@ int main(int argc, char *argv[]) {
         printf("THIRD: %d\n", available[2]);
         printf("\nRUNTIME: %d seconds\n", runtime);
 
-        /* Get the max demand for each customer from max_demand.txt. */
-        //copy 2d array max into max demand       
-
-//        printarray((int *) max, CUSTOMERS, RESOURCES); //debug print        
-
         pthread_attr_t attr; //atributes for all threads?
-
         /* Create struct to assign to customer thread. */
         struct customer_args *args =  malloc(sizeof(args));
         /* Assign arguments as starting resources. */
