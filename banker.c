@@ -22,20 +22,19 @@
 
 /* Global definitions */
 int available[RESOURCES];
-int max[CUSTOMERS][RESOURCES];
+/*Hardcoded max_demand*/
+int max[CUSTOMERS][RESOURCES] = {
+    {7,5,3},
+    {3,2,2},
+    {9,0,2},
+    {2,2,2},
+    {4,3,3}};
 int allocation[CUSTOMERS][RESOURCES];
 int need[CUSTOMERS][RESOURCES];
 
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
 
-/*Defines max_demand, hard coded*/
-int max_demand[CUSTOMERS][RESOURCES] = {
-    {7,5,3},
-    {3,2,2},
-    {9,0,2},
-    {2,2,2},
-    {4,3,3}};
 /* Defines the customer array, to hold all instances of customers. */
 pthread_t customers_array[CUSTOMERS];
 
@@ -83,21 +82,16 @@ int main(int argc, char *argv[]) {
         printf("\nRUNTIME: %d seconds\n", runtime);
 
         pthread_attr_t attr; //atributes for all threads?
-        /* Create struct to assign to customer thread. */
-        struct customer_args *args =  malloc(sizeof(args));
-        /* Assign arguments as starting resources. */
-        args->resource_a = *argv[1];
-        args->resource_b = *argv[2];
-        args->resource_c = *argv[3];
-
         /*Initialize the synchronization tools NOTE 1 teller?*/
         sem_init(&teller, 0, 1);
         for(i = 0; i < CUSTOMERS; i++){
+            /*Create struct to assign to customer threads*/
+            struct customer_args *args = malloc(sizeof(args));
             /* Create customer. */
             pthread_t customers_array[i];
             /* Create pthreads for each customer. */
             pthread_attr_init(&attr);
-            pthread_create(customers_array[i], &attr, Customer, args);
+            pthread_create(&customers_array[i], &attr, Customer, args);
             pthread_join(customers_array[i], NULL);
         }
         //work here
