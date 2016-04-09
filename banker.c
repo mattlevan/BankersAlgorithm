@@ -86,7 +86,10 @@ int main(int argc, char *argv[]) {
         sem_init(&teller, 0, 1);
         for(i = 0; i < CUSTOMERS; i++){
             /*Create struct to assign to customer threads*/
-            struct customer_args *args = malloc(sizeof(args));
+            struct customer_args *args = malloc(sizeof(struct customer_args));
+            args->resource_a=*argv[1];
+            args->resource_b=*argv[2];
+            args->resource_c=*argv[3];
             /* Create customer. */
             pthread_t customers_array[i];
             /* Create pthreads for each customer. */
@@ -94,7 +97,7 @@ int main(int argc, char *argv[]) {
             pthread_create(&customers_array[i], &attr, Customer, args);
             pthread_join(customers_array[i], NULL);
         }
-        //work here
+        printf("End main");
     }
     return EXIT_SUCCESS;
 }

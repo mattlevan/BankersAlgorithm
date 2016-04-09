@@ -30,6 +30,7 @@ struct customer_args {
     int resource_a;
     int resource_b;
     int resource_c;
+    int customer_num;
 };
 /*NOTE for the following two functions use the following syntaxt to call:
  * get_array_from_file((int *)array,2,3,0)*/
