@@ -43,7 +43,7 @@ void *customer(void *customer_args_ptr) {
         
         /*Release resources*/
         if(flag) { //only go in here if we GOT resources
-            
+            return_resources(customer_id);            
         }
     }
 }

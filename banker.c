@@ -267,9 +267,9 @@ bool resource_request(int customer) {
         }
         /*Now check if backup state is safe*/
         if(is_safe()) {
-            printf("State is Safe, keeping changes");
+            printf("State is Safe, keeping changes\n");
         } else {
-            printf("State is NOT SAFE, reverting changes");
+            printf("State is NOT SAFE, reverting changes\n");
             copy_array(backup_available, available);
             copy_array((int *) backup_max, (int *)max);
             copy_array((int *) backup_allocation, (int *) allocation);
@@ -282,9 +282,21 @@ bool resource_request(int customer) {
         pthread_mutex_unlock(&teller);
        return true; 
     }
-}
+} 
+/*Release resources that are allocated to customer_id*/
 void return_resources(int customer_id){
+    int types=2,i;
+    /*Critical Section*/
+    pthread_mutex_lock(&teller);
 
+    /*Remove allocated, and return that to available for each resource*/
+    for(i=0;i<types;i++) {
+        printf("Returning resource: %d for customer %d\n",i,customer_id);
+        available[i] = available[i] - allocation[customer_id][i];
+        allocation[customer_id][i] = 0; 
+    }
+    /*End Critical Section*/
+    pthread_mutex_unlock(&teller);
 }
 /* Check if all elements in given array are true. */
 bool all_true(bool* a) {
