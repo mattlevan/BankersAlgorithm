@@ -37,3 +37,7 @@ extern void return_resources(int customer);
 
 /*Allow main function to use my_rand*/
 extern int my_rand(int x);
+
+/*Allow customer to use the is_done function, checks to see if customer is done*/
+bool is_done(int customer);
+

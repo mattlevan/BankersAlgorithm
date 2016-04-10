@@ -30,6 +30,8 @@ void *customer(void *customer_args_ptr) {
     r = my_rand(5);
     sleep(r); 
     while(1) {
+        /*Check to see if we are done, don't waste cycles if we are!*/
+        if(is_done(customer_id)) break;
         /*Request resources*/
         if(resource_request(customer_id)){
             flag = 1; //we did get resources!
@@ -48,14 +50,15 @@ void *customer(void *customer_args_ptr) {
         /*Sleep before we go through loop again to try*/
         r = my_rand(5);
         sleep(r); 
-    }
+    }/*end while*/
 }
 
 /* Returns number between 0 and x. */
 int my_rand(int x) {
+    srand((unsigned)time(NULL));
     if (x == 0) return 0;
-    /*if given between 0 and 1, flip a coin instead*/
-//    if(x == 1)  return (rand() % 2 == 1);
-    srand(time(NULL)); 
-    return (rand() % x); 
+    if (x == 1) {
+        return (rand() % 2);
+    }
+    return rand() % (x + 1); 
 }
