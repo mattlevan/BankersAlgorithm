@@ -26,19 +26,10 @@ extern int allocation[CUSTOMERS][RESOURCES];
 /* Indicates the remaining resource need of each customer. */
 extern int need[CUSTOMERS][RESOURCES];
 
-/*Struct to pass arguments to customers*/
-struct customer_args {
-    int resource_a;
-    int resource_b;
-    int resource_c;
-    int customer_num;
-};
-
 /*Customer function declaration*/
-extern void *Customer(void *customer_args_ptr);
+extern void *customer(void *customer_args_ptr);
 
 /*Allow Customer function to use Resource_Request*/
-extern bool Resource_Request(int customer, int res, int req);
+extern bool resource_request(int customer, int res, int req);
 
-/*Allow Main file to use rand*/
-int myRand(int x);
+
