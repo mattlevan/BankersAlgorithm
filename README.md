@@ -12,7 +12,8 @@ Bradley Taniguchi
     example: `./banker.o 5 6 3 50` for a runtime of 50 seconds  
 ---
 ### Screenshots  
-to be added...  
+![Screenshot of Output] (/screenshots/GenericRun.png)
+![Screenshot of End of Output] (/screenshots/GenericRun1.png)
 
 --- 
 ### Prompt
