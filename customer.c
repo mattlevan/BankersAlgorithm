@@ -23,16 +23,28 @@ void use_resources(int n);
 /* Primary Customer function, used to hold the logic and variables that 
  * pertain to each thread. No classes in C but this will do.*/
 void *customer(void *customer_args_ptr) {
-    int customer_id, r;
-    
+    int customer_id, r, flag;
+    customer_id = (int) customer_args_ptr;
     /* Customer main loop. */
+    /*Stagard start*/
+    r = my_rand(5);
+    sleep(r); 
     while(1) {
+        /*Request resources*/
+        if(resource_request(customer_id)){
+            flag = 1; //we did get resources!
+        } else {
+            flag = 0; //we didn't get resources
+        }
+
         /* Determine random amount of time before action. */
         r = my_rand(5); 
         sleep(r);
-
-        /*Now request those resources*/
-        resource_request(customer_id); //request resource a
+        
+        /*Release resources*/
+        if(flag) { //only go in here if we GOT resources
+            
+        }
     }
 }
 

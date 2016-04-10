@@ -30,6 +30,7 @@ extern int need[CUSTOMERS][RESOURCES];
 extern void *customer(void *customer_args_ptr);
 
 /*Allow Customer function to use Resource_Request*/
-extern bool resource_request(int customer, int res, int req);
+extern bool resource_request(int customer);
 
-
+/*Allow main function to use my_rand*/
+extern int my_rand(int x);
