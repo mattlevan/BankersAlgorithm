@@ -26,7 +26,7 @@ void *customer(void *customer_args_ptr) {
     int customer_id, r, flag;
     customer_id = (int) customer_args_ptr;
     /* Customer main loop. */
-    /*Stagard start*/
+    /*Stagerred start*/
     r = my_rand(5);
     sleep(r); 
     while(1) {
@@ -36,20 +36,26 @@ void *customer(void *customer_args_ptr) {
         } else {
             flag = 0; //we didn't get resources
         }
-
-        /* Determine random amount of time before action. */
-        r = my_rand(5); 
-        sleep(r);
         
-        /*Release resources*/
-        if(flag) { //only go in here if we GOT resources
-            return_resources(customer_id);            
+        /*Only Print buffer if we have resources*/
+        if(flag) {
+            r = my_rand(5);
+            printf("Customer %d using resources for %d time units\n", customer_id, r);
+            sleep(r); //use resources
+            /*Return resources*/
+            return_resources(customer_id); 
         }
+        /*Sleep before we go through loop again to try*/
+        r = my_rand(5);
+        sleep(r); 
     }
 }
 
 /* Returns number between 0 and x. */
 int my_rand(int x) {
+    if (x == 0) return 0;
+    /*if given between 0 and 1, flip a coin instead*/
+//    if(x == 1)  return (rand() % 2 == 1);
     srand(time(NULL)); 
     return (rand() % x); 
 }

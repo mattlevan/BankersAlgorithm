@@ -34,6 +34,8 @@ int need[CUSTOMERS][RESOURCES];
 
 /* Defines the program's runtime, in seconds. */
 int runtime = 0;
+/* Defines the program's current runtime, in seconds*/
+int currenttime = 0;
 
 /* Defines the customer array, to hold all instances of customers. */
 pthread_t customers_array[CUSTOMERS];
@@ -50,7 +52,7 @@ void add_vectors(int* a, int* b);
 void copy_array(int *src, int* dest);
 void initialize_demand();
 void set_all_false(bool* a);
-
+void keep_time();
 
 /* Main function. */
 int main(int argc, char *argv[]) {
@@ -81,22 +83,35 @@ int main(int argc, char *argv[]) {
         printf("THIRD: %d\n", available[2]);
         printf("\nRUNTIME: %d seconds\n", runtime);
 
-        pthread_attr_t attr; //atributes for all threads?
-        /*Initialize the synchronization tools NOTE 1 teller?*/
-        sem_init(&teller, 0, 1);
+        /*Initialize the synchronization tool*/
+        pthread_mutex_init(&teller, NULL);
+        
+        printf("Creating Customers");
         for(i = 0; i < CUSTOMERS; i++){ 
             /* Create customer. */
             pthread_t customers_array[i];
             /* Create pthreads for each customer. */
+            pthread_attr_t attr; //atributes for all threads?
             pthread_attr_init(&attr);
             pthread_create(&customers_array[i], &attr, customer, i);
-            pthread_join(customers_array[i], NULL);
+           // pthread_join(customers_array[i], NULL);
+            printf("%d ",i);
         }
-        printf("End main");
+        printf("\n");
+        keep_time();
+        printf("End main\n");
     }
     return EXIT_SUCCESS;
 }
-
+/*Timekeeper of main program, used to update every tick and used to printout current time*/
+void keep_time() {
+    while(true) {
+        sleep(1); //wait 1 second
+        currenttime+=1;
+        if(currenttime >= runtime)  break;
+    }
+    return;
+}
 /* Checks state safety. Returns true if safe, else false. */
 bool is_safe() {
     /* Work vector, length m. */
@@ -222,9 +237,9 @@ bool resource_request(int customer) {
     req_b = my_rand(max[customer][1]);
     req_c = my_rand(max[customer][2]);
     /*If request is more than ANY max limit, exit program as there is an error*/
-    if (req_a < max[customer][0] || 
-        req_b < max[customer][1] ||
-        req_c < max[customer][2]) {
+    if (req_a > max[customer][0] || 
+        req_b > max[customer][1] ||
+        req_c > max[customer][2]) {
 
         printf("ERROR! Exceeding max claim:\n");
         printf("Res_A: %d <= %d\n", req_a, max[customer][0]);
@@ -232,17 +247,19 @@ bool resource_request(int customer) {
         printf("Res_C: %d <= %d\n", req_c, max[customer][2]);
         //exit(1);
         return false;
-    }//else we are OK
-
+    }
     /*Lock teller*/
-    pthread_mutex_lock(&teller);        
+    pthread_mutex_lock(&teller);
+    /*Start buffer printout*/
+    printf("At time %d Customer %d requesting <%d,%d,%d> Available = <%d,%d,%d>\n",
+            currenttime, customer, 
+            req_a, req_b, req_c,
+            available[0], available[1], available[2]);
+
     /*See if what your requesting is available*/
     if (req_a <= available[0] || 
         req_b <= available[1] ||   
         req_c <= available[2]) {
-        //WORK HERE SEE IF CAN CREATE SAFE STATE!!!
-        //USED COPIED STATES OF EVERYTHING
-        //IF SAFE, THEN EXECUTE, IF NOT SAFE DO NOTHING!
         
         /*Create backup array, incase this array wont work*/
         int backup_available[RESOURCES]; 
@@ -267,9 +284,13 @@ bool resource_request(int customer) {
         }
         /*Now check if backup state is safe*/
         if(is_safe()) {
-            printf("State is Safe, keeping changes\n");
+            /*Second Buffer Printout*/
+            printf("Customer %d is granted resources\n",customer);
+            printf("Available = <%d,%d,%d> Allocated = <%d,%d,%d>\n",
+                 available[0],available[1],available[2],
+                 allocation[customer][0],allocation[customer][1],allocation[customer][2]);
         } else {
-            printf("State is NOT SAFE, reverting changes\n");
+            printf("Customer %d is denied resources\n",customer);
             copy_array(backup_available, available);
             copy_array((int *) backup_max, (int *)max);
             copy_array((int *) backup_allocation, (int *) allocation);
@@ -281,19 +302,33 @@ bool resource_request(int customer) {
         /*End Critical Section*/
         pthread_mutex_unlock(&teller);
        return true; 
+    }else { //not enough resources
+        printf("NOT ENOUGH \n");
+        pthread_mutex_unlock(&teller);
+        return false;
     }
 } 
 /*Release resources that are allocated to customer_id*/
-void return_resources(int customer_id){
-    int types=2,i;
+void return_resources(int customer){
+    int types=2,i, bin_a,bin_b,bin_c;
     /*Critical Section*/
     pthread_mutex_lock(&teller);
 
+    /*Calculate available*/
+    bin_a = available[0] + allocation[customer][0]; 
+    bin_b = available[1] + allocation[customer][1];
+    bin_c = available[2] + allocation[customer][3];
+    /*Print Buffer*/
+    printf("At time %d Customer %d releasing <%d,%d,%d> Available <%d,%d,%d>",
+            currenttime, customer, 
+            allocation[customer][0],allocation[customer][1],allocation[customer][2],
+            bin_a, bin_b, bin_c);
+
     /*Remove allocated, and return that to available for each resource*/
     for(i=0;i<types;i++) {
-        printf("Returning resource: %d for customer %d\n",i,customer_id);
-        available[i] = available[i] - allocation[customer_id][i];
-        allocation[customer_id][i] = 0; 
+//        printf("Returning resource: %d for customer %d\n",i,customer_id);
+        available[i] = available[i] + allocation[customer][i];
+        allocation[customer][i] = 0; 
     }
     /*End Critical Section*/
     pthread_mutex_unlock(&teller);
