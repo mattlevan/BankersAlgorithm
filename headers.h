@@ -29,5 +29,15 @@ extern int need[CUSTOMERS][RESOURCES];
 /*Customer function declaration*/
 extern void *customer(void *customer_args_ptr);
 
-/*Allow Customer function to use Resource_Request*/
-extern bool resource_request(int customer, int res, int req);
+/*Allow Customer function to use resource_request*/
+extern bool resource_request(int customer);
+
+/*Allow customer function to use return_request*/
+extern void return_resources(int customer);
+
+/*Allow main function to use my_rand*/
+extern int my_rand(int x);
+
+/*Allow customer to use the is_done function, checks to see if customer is done*/
+bool is_done(int customer);
+

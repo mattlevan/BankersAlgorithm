@@ -6,7 +6,7 @@ app: banker.c customer.o
 	gcc -pthread banker.c customer.o -o banker.o -w
 
 customer.o: customer.c 
-	gcc -c customer.c -o customer.o
+	gcc -c customer.c -o customer.o -w
 
 # manual clean of everything
 clean: 

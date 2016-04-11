@@ -9,10 +9,11 @@ Bradley Taniguchi
 ### Instructions
 1. compile with `make` or `make app`
 2. run with `./banker.o <int num first resource> <int num second> <int num third> <int runtime seconds>`
-    example: `./banker.o 5 6 3 50` for a runtime of 50 seconds
+    example: `./banker.o 5 6 3 50` for a runtime of 50 seconds  
 ---
-### Screenshots
-to be added...
+### Screenshots  
+![Screenshot of Output] (/screenshots/GenericRun.png)
+![Screenshot of End of Output] (/screenshots/GenericRun1.png)
 
 --- 
 ### Prompt
